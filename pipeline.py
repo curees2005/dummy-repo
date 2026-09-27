@@ -7,7 +7,7 @@ from blocking import run_blocking
 from features import extract_features
 
 def main():
-    dataset_dir = Path('/kaggle/input/AMAZOM-ML-CHALLENGE')   # your dataset with train/test tsvs
+    dataset_dir = Path('/kaggle/input/datasets/keyagoyal/amazon-ml-challenge/student_resource/dataset')   # your dataset with train/test tsvs
     output_dir = Path('/kaggle/working/output')
 
     if not dataset_dir.exists():
