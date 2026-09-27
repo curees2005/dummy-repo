@@ -6,6 +6,44 @@ from preprocess import clean_text
 from blocking import run_blocking
 from features import extract_features
 
+import shutil
+from pathlib import Path
+
+# 1. Copy your uploaded scripts into a writable folder
+src_dir = Path('/kaggle/input/matching-pipeline-code')   # <-- your code dataset name
+work_dir = Path('/kaggle/working/src')
+work_dir.mkdir(parents=True, exist_ok=True)
+
+for fname in ['preprocess.py', 'blocking.py', 'features.py', 'pipeline.py']:
+    shutil.copy(src_dir / fname, work_dir / fname)
+
+# 2. Patch the hardcoded path block in pipeline.py
+pipeline_file = work_dir / 'pipeline.py'
+code = pipeline_file.read_text()
+
+old_block = (
+    '    base_dir = Path(__file__).resolve().parents[3]\n'
+    '    dataset_dir = base_dir / "dataset"\n'
+    '    output_dir = base_dir / "output"'
+)
+
+new_block = (
+    '    dataset_dir = Path("/kaggle/input/<your-dataset-name>")\n'  # <-- your data dataset name
+    '    output_dir = Path("/kaggle/working/output")'
+)
+
+assert old_block in code, "Original block not found — check for whitespace/line differences"
+code = code.replace(old_block, new_block)
+pipeline_file.write_text(code)
+
+# 3. Make the patched scripts importable and run
+import sys
+sys.path.insert(0, str(work_dir))
+
+import pipeline
+pipeline.main()
+
+
 def evaluate_macro_f05(ground_truth_map: dict, prediction_map: dict) -> float:
     scores = []
 
