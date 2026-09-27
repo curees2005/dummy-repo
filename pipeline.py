@@ -28,7 +28,7 @@ old_block = (
 )
 
 new_block = (
-    '    dataset_dir = Path("/kaggle/input/<your-dataset-name>")\n'  # <-- your data dataset name
+    '    dataset_dir = Path("/kaggle/input/AMAZON-ML-CHALLENGE")\n'  # <-- your data dataset name
     '    output_dir = Path("/kaggle/working/output")'
 )
 
